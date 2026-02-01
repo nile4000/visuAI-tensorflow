@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
-import { UploadImagesComponent } from './components/upload-images/upload-images.component';
+import { UploadImagesComponent } from './features/image-upload/upload-images.component';
 import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
@@ -9,6 +9,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   imports: [RouterOutlet, UploadImagesComponent, MatCard, MatCardContent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = 'visuAI';

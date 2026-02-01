@@ -1,5 +1,5 @@
 import { PercentPipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, resource } from '@angular/core';
 import {
   MatCard,
   MatCardContent,
@@ -7,7 +7,7 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { MatToolbar } from '@angular/material/toolbar';
-import { ImageClassifierService } from 'src/app/services/image-classifier.service';
+import { ImageClassifierService } from '../../shared/services/image-classifier.service';
 import { Prediction } from '../../common/interfaces/prediction.interface';
 
 @Component({
@@ -23,36 +23,31 @@ import { Prediction } from '../../common/interfaces/prediction.interface';
   ],
   templateUrl: './upload-images.component.html',
   styleUrls: ['./upload-images.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UploadImagesComponent implements OnInit {
+export class UploadImagesComponent {
   // Signals für den Zustand
   selectedFiles = signal<FileList | undefined>(undefined);
   selectedFileNames = signal<string[]>([]);
   previews = signal<string[]>([]);
   predictions = signal<Prediction[] | undefined>(undefined);
   
-  // Signal für Lade-Status
-  isLoading = signal<boolean>(false);
+  // Signal für manuelles Laden (z.B. während der Klassifizierung)
+  private manualLoading = signal<boolean>(false);
 
   private imageClassifierService = inject(ImageClassifierService);
 
-  ngOnInit(): void {
-    this.loadModelOnInit();
-  }
+  /**
+   * Nutzung der neuen Resource API für das initiale Laden des Modells.
+   */
+  modelResource = resource({
+    loader: () => this.imageClassifierService.initModel()
+  });
 
   /**
-   * Lädt das Modell beim Start der Komponente.
+   * Kombinierter Lade-Status aus Resource und manuellem State.
    */
-  private async loadModelOnInit(): Promise<void> {
-    try {
-      this.isLoading.set(true);        // Spinner ein
-      await this.imageClassifierService.initModel();
-    } catch (err) {
-      console.error('Fehler beim Laden des Modells:', err);
-    } finally {
-      this.isLoading.set(false);       // Spinner aus
-    }
-  }
+  isLoading = computed(() => this.modelResource.isLoading() || this.manualLoading());
 
   /**
    * Wird aufgerufen, wenn Dateien über das Input ausgewählt werden.
@@ -75,7 +70,7 @@ export class UploadImagesComponent implements OnInit {
     const imagePromises: Promise<HTMLImageElement>[] = [];
 
     try {
-      this.isLoading.set(true); // Spinner ein
+      this.manualLoading.set(true); // Spinner ein
 
       // Alle Bilder laden
       for (const file of fileArray) {
@@ -99,7 +94,7 @@ export class UploadImagesComponent implements OnInit {
     } catch (error) {
       console.error('Fehler beim Verarbeiten der Bilder:', error);
     } finally {
-      this.isLoading.set(false); // Spinner aus
+      this.manualLoading.set(false); // Spinner aus
     }
   }
 
