@@ -1,59 +1,124 @@
-# visuAI - Image recognition
+# visuAI-tensorflow
+
+**Intelligent Image Recognition with OmniRL Vision-Language Understanding**
 
 ![visuAI Screenshot](./src/assets/img/screenshot.png "visuAI")
 
-## Description
+## 📋 Overview
 
-visuAI is an image recognition application that analyzes images and suggests the most likely categories.  
-This project uses TensorFlow (MobileNet | WebGL) for image classification.
+visuAI is an advanced image recognition system that combines:
+- **Frontend:** Angular app with TensorFlow.js (MobileNet) for fast classification
+- **Backend:** FastAPI + OmniRL for intelligent descriptions and Q&A
 
-## Features
+## 🚀 Quick Start
 
-- **Image Classification:** Quickly identify objects in images.
-- **High Compatibility:** Runs directly in your browser using TensorFlow.js.
-- **Easy to Use:** Simple interface for uploading and analyzing images.
+### Frontend Setup
 
-## Getting Started
+1. **Install dependencies:**
+```bash
+npm install
+```
 
-### Prerequisites
+2. **Run development server:**
+```bash
+ng serve
+```
 
-- [Node.js](https://nodejs.org/) 
-- [Angular CLI](https://angular.io/cli)
+Visit `http://localhost:4200`
 
-### Installation
+### Backend Setup
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/nile4000/visuAI-frontend.git
+1. **Navigate to backend:**
+```bash
+cd backend
+```
 
-2. Navigate into the project directory:
-   ```bash
-   cd visuAI-frontend
+2. **Create virtual environment:**
+```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+```
 
-3. Install dependencies
-   ```bash
-   npm install
+3. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
 
-## Development Server
+4. **Configure environment:**
+```bash
+copy .env.example .env
+```
 
-Run the development server:
-    ```bash
-    ng serve
-    ```
+5. **Run server:**
+```bash
+python main.py
+```
 
-Once the server is running, open your browser at http://localhost:4200/. The application automatically reloads when you modify any source files.
+API available at `http://localhost:8000`
 
-## Build
+## 🏗️ Architecture
 
-To create a production build:
-   ```bash
-   ng serve
-   ```
+```
+Image Upload → MobileNet (Browser) → Predictions
+                                          ↓
+                                    FastAPI Backend
+                                          ↓
+                                    OmniRL Model
+                                          ↓
+                              Description + Q&A ← User
+```
 
-## Support
+## ✨ Features
 
-If you have any questions or issues, please contact nile4000.
+### Frontend
+- **Fast Classification:** TensorFlow.js runs in browser (no server needed)
+- **Real-time Results:** Instant prediction probabilities
+- **Modern UI:** Angular Material design
 
-## License
+### Backend
+- **Smart Descriptions:** Converts predictions to natural language
+- **Visual Q&A:** Answer questions about images
+- **Caching:** Fast responses for repeated queries
 
-This project is licensed under the MIT License.
+## 📖 Documentation
+
+- **Frontend:** See Angular docs
+- **Backend API:** `http://localhost:8000/docs` (when running)
+- **Implementation Plan:** See project artifacts
+
+## 🔧 Tech Stack
+
+- **Frontend:** Angular 18, TensorFlow.js, Material UI
+- **Backend:** Python, FastAPI, PyTorch (OmniRL)
+- **ML Models:** MobileNet (classification), Qwen2.5-VL-3B (VQA)
+
+## 📂 Project Structure
+
+```
+visuAI-tensorflow/
+├── src/                    # Angular frontend
+│   ├── app/
+│   │   ├── components/
+│   │   └── services/
+│   └── assets/
+├── backend/               # FastAPI backend
+│   ├── main.py
+│   ├── models/
+│   ├── services/
+│   └── training/
+└── ...
+```
+
+## 🎯 Current Status
+
+✅ **Phase 1:** Backend structure complete (mock mode)  
+⏳ **Phase 2:** OmniRL training in progress  
+⏳ **Phase 3:** Frontend integration  
+
+## 📝 License
+
+MIT License
+
+## 🤝 Contributing
+
+Contributions welcome! This is an experimental project for vision-language integration.
